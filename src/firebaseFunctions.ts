@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword, User } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  User,
+} from "firebase/auth";
 import { auth } from "../firebase";
 import { FirebaseError } from "firebase/app";
 
@@ -39,6 +43,17 @@ export const signUpWithEmailAndPassword = async (
     email,
     password
   );
-  console.log(userCredential);
+  return userCredential.user;
+};
+
+export const loginWithEmailAndPassword = async (
+  email: string,
+  password: string
+): Promise<User> => {
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
   return userCredential.user;
 };
