@@ -24,12 +24,6 @@ function App() {
   ): Promise<void> => {
     e.preventDefault();
 
-    if (!email || !password) {
-      console.log("Empty");
-      toast("Email or password invalid!");
-      return;
-    }
-
     try {
       const user = await signUpWithEmailAndPassword(email, password);
       console.log(user);
