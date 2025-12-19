@@ -2,8 +2,8 @@ import { ChangeEvent, MouseEvent, useState } from "react";
 import {
   parseAuthErrorMessage,
   signUpWithEmailAndPassword,
-} from "../firebaseFunctions";
-import toast from "react-hot-toast";
+} from "../utils/auth";
+import { sendErrorToast, sendSuccessToast } from "../utils/toast";
 
 type SignUpProps = {
   onSwitch: () => void;
@@ -25,11 +25,18 @@ export default function SignUp({ onSwitch }: SignUpProps) {
     e: MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
     e.preventDefault();
+
+    if (!email || !password) {
+      sendErrorToast("Invalid email or password.");
+      return;
+    }
+
     try {
       const user = await signUpWithEmailAndPassword(email, password);
+      sendSuccessToast(`Signed Up using ${user.email}`);
       console.log(user);
     } catch (err) {
-      toast.error(parseAuthErrorMessage(err));
+      sendErrorToast(parseAuthErrorMessage(err));
     }
   };
 
