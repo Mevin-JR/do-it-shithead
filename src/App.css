@@ -1,14 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   font-family: "Funnel Display", sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-
-  color: #0f0f0f;
-  background-color: #f6f6f6;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,16 +16,14 @@
   -webkit-text-size-adjust: 100%;
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
-} */
+.smooth-transition {
+  @apply transition-colors duration-500 ease-in-out;
+}
 
 @theme {
   --animate-toast-in: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-toast-out: toastOut 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-pulse-strong: pulse-strong 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes toastIn {
@@ -49,4 +46,30 @@
     opacity: 0;
     transform: translateX(22px);
   }
+}
+
+@keyframes pulse-strong {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+/* Loading dots */
+.loader {
+  width: 4px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 19px 0 0 7px, 38px 0 0 3px, 57px 0 0 0;
+  transform: translateX(-38px);
+  animation: l21 1s infinite alternate linear;
+}
+
+@keyframes l21 {
+  50%  {box-shadow: 19px 0 0 3px, 38px 0 0 7px, 57px 0 0 3px}
+  100% {box-shadow: 19px 0 0 0  , 38px 0 0 3px, 57px 0 0 7px}
 }
