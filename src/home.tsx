@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
+import { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const navigation = useNavigate();
@@ -10,6 +11,7 @@ export default function Home() {
       <button onClick={() => navigation("/")} className="border p-2">
         Back
       </button>
+      <Toaster />
     </main>
   );
 }
