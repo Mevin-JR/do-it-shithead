@@ -3,7 +3,6 @@ import {
   ArrowLeftFromLine,
   CalendarDays,
   ListTodo,
-  LucideIcon,
   Search,
   CalendarArrowUp,
   Plus,
@@ -13,24 +12,27 @@ import {
 import { auth } from "../../../firebase";
 import { useState } from "react";
 
-type tasksNavItemsType = {
-  name: string;
-  icon: LucideIcon;
+export type TabKey =
+  | (typeof tasksNavItems)[number]["id"]
+  | (typeof listsNavItems)[number]["id"];
+
+type NavbarProps = {
+  activeTab: TabKey;
+  setActiveTab: (tab: TabKey) => void;
 };
 
-const tasksNavItems: tasksNavItemsType[] = [
-  { name: "Upcoming", icon: CalendarArrowUp },
-  { name: "Today", icon: ListTodo },
-  { name: "Calender", icon: CalendarDays },
-];
+const tasksNavItems = [
+  { id: "upcoming", name: "Upcoming", icon: CalendarArrowUp },
+  { id: "today", name: "Today", icon: ListTodo },
+  { id: "calender", name: "Calender", icon: CalendarDays },
+] as const;
 
 const listsNavItems = [
-  { name: "Personal", iconColour: "rgba(255, 0, 0, 0.7)" },
-  { name: "Work", iconColour: "rgba(0, 183, 235, 0.7)" },
-];
+  { id: "personal", name: "Personal", iconColour: "rgba(255, 0, 0, 0.7)" },
+  { id: "work", name: "Work", iconColour: "rgba(0, 183, 235, 0.7)" },
+] as const;
 
-export default function Navbar() {
-  const [active, setActive] = useState<string>(tasksNavItems[0].name);
+export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   const toggleSidebar = () => {
@@ -110,9 +112,9 @@ export default function Navbar() {
             {tasksNavItems.map((item) => (
               <li
                 key={item.name}
-                onClick={() => setActive(item.name)}
+                onClick={() => setActiveTab(item.id)}
                 className={`p-2 rounded-lg hover:cursor-pointer transition-all duration-300 ${
-                  active === item.name
+                  activeTab === item.id
                     ? "bg-[rgba(213,211,211,.6)]"
                     : "hover:bg-[#edebeb]"
                 }`}
@@ -127,7 +129,7 @@ export default function Navbar() {
                   </span>
                   <span
                     className={`text-gray-600 text-sm ${
-                      active === item.name ? "font-bold" : ""
+                      activeTab === item.id ? "font-bold" : ""
                     } ${
                       sidebarOpen
                         ? "opacity-100 w-auto"
@@ -153,9 +155,9 @@ export default function Navbar() {
             {listsNavItems.map((item) => (
               <li
                 key={item.name}
-                onClick={() => setActive(item.name)}
+                onClick={() => setActiveTab(item.id)}
                 className={`p-2 rounded-lg hover:cursor-pointer transition-all duration-300 ${
-                  active === item.name
+                  activeTab === item.id
                     ? "bg-[rgba(213,211,211,.6)]"
                     : "hover:bg-[#edebeb]"
                 }`}
@@ -171,7 +173,7 @@ export default function Navbar() {
                   />
                   <span
                     className={`text-gray-600 text-sm ${
-                      active === item.name ? "font-bold" : ""
+                      activeTab === item.id ? "font-bold" : ""
                     } ${
                       sidebarOpen
                         ? "opacity-100 w-auto"
