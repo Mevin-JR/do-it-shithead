@@ -10,7 +10,10 @@ import {
   LogOut,
 } from "lucide-react";
 import { auth } from "../../../firebase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserData, UserDataType } from "../../utils/auth";
+import { sendErrorToast } from "../../utils/toast";
+import { useAuth } from "../../context/authContext";
 
 export type TabKey =
   | (typeof tasksNavItems)[number]["id"]
@@ -24,7 +27,7 @@ type NavbarProps = {
 const tasksNavItems = [
   { id: "upcoming", name: "Upcoming", icon: CalendarArrowUp },
   { id: "today", name: "Today", icon: ListTodo },
-  { id: "calender", name: "Calender", icon: CalendarDays },
+  { id: "calendar", name: "Calendar", icon: CalendarDays },
 ] as const;
 
 const listsNavItems = [
@@ -34,12 +37,24 @@ const listsNavItems = [
 
 export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [userData, setUserData] = useState<UserDataType>();
 
   const toggleSidebar = () => {
     setSidebarOpen((prev) => !prev);
   };
 
   const iconSize = sidebarOpen ? 18 : 22;
+
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user) return;
+
+    getUserData(user.uid)
+      .then((data) => setUserData(data))
+      .catch((error) => sendErrorToast(error));
+  }, [user?.uid]);
 
   return (
     <nav
@@ -48,7 +63,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
         !sidebarOpen && "close-nav"
       }`}
     >
-      <div className="flex flex-col gap-2">
+      <div className={`flex flex-col ${sidebarOpen && "gap-2"}`}>
         {/* Menu title & Collapse button */}
         <div
           className={`flex ${
@@ -144,7 +159,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
           </ul>
         </div>
 
-        <hr className="text-gray-400/35 rounded-lg" />
+        <hr className="text-gray-400/15 rounded-lg" />
 
         {/* Lists */}
         <div className="flex flex-col gap-2">
@@ -196,7 +211,9 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                 </span>
                 <span
                   className={`text-gray-600 text-sm ${
-                    !sidebarOpen && "hidden"
+                    sidebarOpen
+                      ? "opacity-100 w-auto"
+                      : "opacity-0 w-0 overflow-hidden"
                   }`}
                 >
                   Add new list
@@ -206,7 +223,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
           </ul>
         </div>
 
-        <hr className="text-gray-400/35 rounded-lg" />
+        <hr className="text-gray-400/15 rounded-lg" />
       </div>
       <div className="mt-auto">
         <ul>
@@ -252,6 +269,41 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             </a>
           </li>
         </ul>
+        <hr className="mt-2 text-gray-400/15 rounded-lg" />
+        {userData ? (
+          <div
+            className={`w-full p-2 flex items-center rounded-lg ${
+              sidebarOpen ? "justify-start gap-5" : "justify-center"
+            }`}
+          >
+            <div
+              className={`w-8 h-8 rounded-full ${
+                !sidebarOpen && "cursor-pointer"
+              }`}
+            >
+              <img src={userData?.userIcon} />
+            </div>
+            <div
+              className={`flex flex-col text-nowrap overflow-hidden text-ellipsis ${
+                sidebarOpen
+                  ? "opacity-100 w-auto"
+                  : "opacity-0 w-0 overflow-hidden"
+              }`}
+            >
+              <span className="text-sm text-black">{userData?.username}</span>
+              <span className="text-xs text-gray-500">{userData?.email}</span>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full p-2 flex items-center gap-5 border-t border-t-gray-400/15 animate-pulse">
+            <div className="w-8 h-8 rounded-full bg-gray-300/70" />
+
+            <div className="flex flex-col gap-2 overflow-hidden">
+              <div className="h-3 w-24 rounded bg-gray-300/70" />
+              <div className="h-2.5 w-36 rounded bg-gray-300/50" />
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

@@ -6,7 +6,14 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { FirebaseError } from "firebase/app";
-import { doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  DocumentData,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 const AUTH_ERROR_MESSAGES: Record<string, string> = {
   "auth/email-already-exists": "This email is already in use",
@@ -81,4 +88,22 @@ export const loginWithEmailAndPassword = async (
   });
 
   return userCredential.user;
+};
+
+export type UserDataType = {
+  uid: string;
+  email: string;
+  userIcon: string;
+  username: string;
+  createdAt: string;
+  emailVerified: boolean;
+};
+
+export const getUserData = async (uid: string): Promise<UserDataType> => {
+  const snap = await getDoc(doc(db, "users", uid));
+  if (!snap.exists()) {
+    throw new Error("User data unavailable, please retry");
+  }
+
+  return snap.data() as UserDataType;
 };
