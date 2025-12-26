@@ -1,3 +1,4 @@
+import { signOut } from "firebase/auth";
 import {
   ArrowLeftFromLine,
   CalendarDays,
@@ -6,7 +7,11 @@ import {
   Search,
   CalendarArrowUp,
   Plus,
+  SlidersHorizontal,
+  LogOut,
 } from "lucide-react";
+import { auth } from "../../../firebase";
+import { useState } from "react";
 
 type tasksNavItemsType = {
   name: string;
@@ -25,77 +30,226 @@ const listsNavItems = [
 ];
 
 export default function Navbar() {
+  const [active, setActive] = useState<string>(tasksNavItems[0].name);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+
+  const toggleSidebar = () => {
+    setSidebarOpen((prev) => !prev);
+  };
+
+  const iconSize = sidebarOpen ? 18 : 22;
+
   return (
-    <nav className="w-72 max-w-[25vw] min-h-full flex flex-col gap-5 p-3 rounded-xl bg-[#f4f4f4]">
-      {/* Menu title & Collapse button */}
-      <div className="w-full flex gap-5 items-center justify-between">
-        <h2 className="text-xl font-semibold">Menu</h2>
-        <button className="cursor-pointer">
-          <ArrowLeftFromLine size={22} className="text-gray-600" />
-        </button>
+    <nav
+      id="navbar"
+      className={`w-72 max-w-[25vw] min-h-full flex flex-col gap-5 p-3 rounded-xl bg-[#f4f4f4] transition-all duration-300 overflow-hidden text-nowrap ${
+        !sidebarOpen && "close-nav"
+      }`}
+    >
+      <div className="flex flex-col gap-2">
+        {/* Menu title & Collapse button */}
+        <div
+          className={`flex ${
+            sidebarOpen
+              ? "w-full gap-5 items-center justify-between"
+              : "justify-center"
+          }`}
+        >
+          <h2
+            className={`text-xl font-semibold ${
+              sidebarOpen
+                ? "opacity-100 w-auto"
+                : "opacity-0 w-0 overflow-hidden"
+            }`}
+          >
+            Menu
+          </h2>
+          <button
+            onClick={toggleSidebar}
+            className={`hover:bg-[#edebeb] rounded-lg p-2 cursor-pointer transition-all duration-300 ${
+              !sidebarOpen && "w-full flex justify-center rotate-y-180"
+            }`}
+          >
+            <ArrowLeftFromLine size={22} className="text-gray-600" />
+          </button>
+        </div>
+
+        {/* Search Field */}
+        <div className="relative w-full">
+          {sidebarOpen ? (
+            <>
+              <Search
+                size={16}
+                className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-600"
+              />
+              <input
+                type="text"
+                placeholder="Search"
+                maxLength={30}
+                className="w-full border border-gray-300 outline-none p-2 pl-8 rounded text-sm text-gray-600 placeholder:text-gray-600 focus:border-gray-600 transition-colors duration-300"
+              />
+            </>
+          ) : (
+            <a className="p-2 rounded-lg flex items-center justify-center hover:bg-[#edebeb] cursor-pointer">
+              <Search size={22} className="text-gray-600" />
+            </a>
+          )}
+        </div>
       </div>
 
-      {/* Search Field */}
-      <div className="relative w-full">
-        <Search
-          size={16}
-          className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-600"
-        />
-        <input
-          type="text"
-          placeholder="Search"
-          maxLength={30}
-          className="w-full border border-gray-300 outline-none p-2 pl-8 rounded text-sm text-gray-600 placeholder:text-gray-600 focus:border-gray-600 transition-colors duration-300"
-        />
-      </div>
+      {!sidebarOpen && <hr className="text-gray-400/35 rounded-lg" />}
 
-      <div className="mt-5 flex flex-col gap-5">
+      <div className={`flex flex-col gap-5 ${sidebarOpen ? "mt-5" : ""}`}>
         {/* Tasks Nav Section */}
         <div className="flex flex-col gap-2">
-          <h3 className="text-black font-semibold text-xs">TASKS</h3>
+          {sidebarOpen && (
+            <h3 className="text-black font-semibold text-xs">TASKS</h3>
+          )}
+
           <ul>
             {tasksNavItems.map((item) => (
-              <li className="p-2 rounded-lg hover:bg-[#edebeb] hover:cursor-pointer">
-                <a className="flex items-center gap-3">
-                  <span>
-                    {<item.icon size={18} className="text-gray-600" />}
+              <li
+                key={item.name}
+                onClick={() => setActive(item.name)}
+                className={`p-2 rounded-lg hover:cursor-pointer transition-all duration-300 ${
+                  active === item.name
+                    ? "bg-[rgba(213,211,211,.6)]"
+                    : "hover:bg-[#edebeb]"
+                }`}
+              >
+                <a
+                  className={`flex items-center ${
+                    sidebarOpen ? " gap-3 justify-start" : "justify-center"
+                  }`}
+                >
+                  <span className="w-6 flex justify-center">
+                    {<item.icon size={iconSize} className="text-gray-600" />}
                   </span>
-                  <span className="text-gray-600 text-sm">{item.name}</span>
+                  <span
+                    className={`text-gray-600 text-sm ${
+                      active === item.name ? "font-bold" : ""
+                    } ${
+                      sidebarOpen
+                        ? "opacity-100 w-auto"
+                        : "opacity-0 w-0 overflow-hidden"
+                    }`}
+                  >
+                    {item.name}
+                  </span>
                 </a>
               </li>
             ))}
           </ul>
         </div>
 
-        <hr className="text-gray-400/15" />
+        <hr className="text-gray-400/35 rounded-lg" />
 
         {/* Lists */}
         <div className="flex flex-col gap-2">
-          <h3 className="text-black font-semibold text-xs">LISTS</h3>
+          {sidebarOpen && (
+            <h3 className="text-black font-semibold text-xs">LISTS</h3>
+          )}
           <ul>
             {listsNavItems.map((item) => (
-              <li className="p-2 rounded-lg hover:bg-[#edebeb] hover:cursor-pointer">
-                <a className="flex items-center gap-3">
+              <li
+                key={item.name}
+                onClick={() => setActive(item.name)}
+                className={`p-2 rounded-lg hover:cursor-pointer transition-all duration-300 ${
+                  active === item.name
+                    ? "bg-[rgba(213,211,211,.6)]"
+                    : "hover:bg-[#edebeb]"
+                }`}
+              >
+                <a
+                  className={`flex items-center ${
+                    sidebarOpen ? " gap-3 justify-start" : "justify-center"
+                  }`}
+                >
                   <span
-                    className={`w-4 h-4 rounded`}
+                    className={`${sidebarOpen ? "w-4 h-4" : "w-5 h-5"} rounded`}
                     style={{ backgroundColor: item.iconColour }}
                   />
-                  <span className="text-gray-600 text-sm">{item.name}</span>
+                  <span
+                    className={`text-gray-600 text-sm ${
+                      active === item.name ? "font-bold" : ""
+                    } ${
+                      sidebarOpen
+                        ? "opacity-100 w-auto"
+                        : "opacity-0 w-0 overflow-hidden"
+                    }`}
+                  >
+                    {item.name}
+                  </span>
                 </a>
               </li>
             ))}
             <li className="p-2 rounded-lg hover:bg-[#edebeb] hover:cursor-pointer">
-              <a className="flex items-center gap-3">
+              <a
+                className={`flex items-center ${
+                  sidebarOpen ? " gap-3 justify-start" : "justify-center"
+                }`}
+              >
                 <span>
-                  <Plus size={18} className="text-gray-600" />
+                  <Plus size={iconSize} className="text-gray-600" />
                 </span>
-                <span className="text-gray-600 text-sm">Add new list</span>
+                <span
+                  className={`text-gray-600 text-sm ${
+                    !sidebarOpen && "hidden"
+                  }`}
+                >
+                  Add new list
+                </span>
               </a>
             </li>
           </ul>
         </div>
 
-        <hr className="text-gray-400/15" />
+        <hr className="text-gray-400/35 rounded-lg" />
+      </div>
+      <div className="mt-auto">
+        <ul>
+          <li className="p-2 rounded-lg hover:bg-[#edebeb] hover:cursor-pointer">
+            <a
+              className={`flex items-center ${
+                sidebarOpen ? " gap-3 justify-start" : "justify-center"
+              }`}
+            >
+              <span>
+                <SlidersHorizontal size={iconSize} className="text-gray-600" />
+              </span>
+              <span
+                className={`text-gray-600 text-sm ${
+                  sidebarOpen
+                    ? "opacity-100 w-auto"
+                    : "opacity-0 w-0 overflow-hidden"
+                }`}
+              >
+                Settings
+              </span>
+            </a>
+          </li>
+          <li className="p-2 rounded-lg hover:bg-[#edebeb] hover:cursor-pointer">
+            <a
+              onClick={() => signOut(auth)}
+              className={`flex items-center ${
+                sidebarOpen ? " gap-3 justify-start" : "justify-center"
+              }`}
+            >
+              <span>
+                <LogOut size={iconSize} className="text-gray-600" />
+              </span>
+              <span
+                className={`text-gray-600 text-sm ${
+                  sidebarOpen
+                    ? "opacity-100 w-auto"
+                    : "opacity-0 w-0 overflow-hidden"
+                }`}
+              >
+                Log Out
+              </span>
+            </a>
+          </li>
+        </ul>
       </div>
     </nav>
   );
