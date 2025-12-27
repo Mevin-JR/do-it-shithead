@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { getUserData, UserDataType } from "../../utils/auth";
 import { sendErrorToast } from "../../utils/toast";
 import { useAuth } from "../../context/authContext";
+import { censorEmail } from "../../utils/userData";
 
 export type TabKey =
   | (typeof tasksNavItems)[number]["id"]
@@ -100,6 +101,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                 className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-600"
               />
               <input
+                name="search"
                 type="text"
                 placeholder="Search"
                 maxLength={30}
@@ -291,7 +293,9 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
               }`}
             >
               <span className="text-sm text-black">{userData?.username}</span>
-              <span className="text-xs text-gray-500">{userData?.email}</span>
+              <span className="text-xs text-gray-500">
+                {censorEmail(userData?.email)}
+              </span>
             </div>
           </div>
         ) : (
