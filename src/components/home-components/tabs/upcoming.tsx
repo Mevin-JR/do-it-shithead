@@ -1,7 +1,11 @@
+import AddTaskBar from "../addTaskBar";
+import TabHeader from "../tabHeader";
+
 export default function Upcoming() {
   return (
-    <div>
-      <h1>Upcoming Tasks Page [DEBUG]</h1>
+    <div className="flex flex-col gap-5">
+      <TabHeader heading="Upcoming" />
+      <AddTaskBar tabId="upcoming" />
     </div>
   );
 }

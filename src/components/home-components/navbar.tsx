@@ -37,8 +37,15 @@ const listsNavItems = [
 ] as const;
 
 export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return localStorage.getItem("sidebar") !== "closed";
+  });
   const [userData, setUserData] = useState<UserDataType>();
+
+  useEffect(() => {
+    localStorage.setItem("sidebar", sidebarOpen ? "open" : "closed");
+  }, [sidebarOpen]);
 
   const toggleSidebar = () => {
     setSidebarOpen((prev) => !prev);
@@ -49,13 +56,12 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (loading) return;
-    if (!user) return;
+    if (loading || !user) return;
 
     getUserData(user.uid)
       .then((data) => setUserData(data))
       .catch((error) => sendErrorToast(error));
-  }, [user?.uid]);
+  }, [user?.uid, loading]);
 
   return (
     <nav
@@ -279,14 +285,14 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             }`}
           >
             <div
-              className={`w-8 h-8 rounded-full ${
+              className={`w-8 h-8 rounded-full  ${
                 !sidebarOpen && "cursor-pointer"
               }`}
             >
               <img src={userData?.userIcon} />
             </div>
             <div
-              className={`flex flex-col text-nowrap overflow-hidden text-ellipsis ${
+              className={`flex flex-col text-nowrap overflow-hidden text-ellipsis select-none ${
                 sidebarOpen
                   ? "opacity-100 w-auto"
                   : "opacity-0 w-0 overflow-hidden"
@@ -299,13 +305,19 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             </div>
           </div>
         ) : (
-          <div className="w-full p-2 flex items-center gap-5 border-t border-t-gray-400/15 animate-pulse">
+          <div
+            className={`w-full p-2 flex items-center gap-5 border-t border-t-gray-400/15 animate-pulse ${
+              sidebarOpen ? "justify-start" : "justify-center"
+            }`}
+          >
             <div className="w-8 h-8 rounded-full bg-gray-300/70" />
 
-            <div className="flex flex-col gap-2 overflow-hidden">
-              <div className="h-3 w-24 rounded bg-gray-300/70" />
-              <div className="h-2.5 w-36 rounded bg-gray-300/50" />
-            </div>
+            {sidebarOpen && (
+              <div className="flex flex-col gap-2 overflow-hidden">
+                <div className="h-3 w-24 rounded bg-gray-300/70" />
+                <div className="h-2.5 w-36 rounded bg-gray-300/50" />
+              </div>
+            )}
           </div>
         )}
       </div>

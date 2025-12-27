@@ -8,7 +8,6 @@ import { auth, db } from "../../firebase";
 import { FirebaseError } from "firebase/app";
 import {
   doc,
-  DocumentData,
   getDoc,
   serverTimestamp,
   setDoc,
