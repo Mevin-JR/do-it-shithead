@@ -2,6 +2,7 @@ import { ClipboardPen } from "lucide-react";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { TabKey } from "./navbar";
 import { addTask } from "../../utils/taskHandler";
+import { sendErrorToast, sendSuccessToast } from "../../utils/toast";
 
 type AddTaskBarProps = {
   tabId: TabKey;
@@ -20,7 +21,20 @@ export default function AddTaskBar({ tabId }: AddTaskBarProps) {
     if (!taskInput) return;
 
     if (e.key === "Enter") {
-      addTask(taskInput, tabId);
+      if (taskInput.length < 5) {
+        sendErrorToast("Task cannot be less than 5 characters");
+        return;
+      }
+
+      addTask(taskInput, tabId)
+        .then(() => {
+          setTaskInput("");
+          sendSuccessToast("Created new task");
+        })
+        .catch((error) => {
+          console.error(error);
+          sendErrorToast("Error during task creation, try again");
+        });
     }
   };
 
