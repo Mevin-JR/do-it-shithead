@@ -8,35 +8,22 @@ import Loading from "./components/loading";
 import ThemeSwitcher from "./components/themeSwitcher";
 import { useAuth } from "./context/authContext";
 import { Navigate } from "react-router-dom";
+import { initContextMenu } from "./utils/contextMenu";
 
 type AuthMode = "login" | "signup";
 
-type MenuItem = {
-  label: string;
-  action: () => void;
-};
-
 export default function App() {
   const [mode, setMode] = useState<AuthMode>("login");
-  const [pageLoading, setPageLoading] = useState<boolean>(false);
-  const [menu, setMenu] = useState<{
-    x: number;
-    y: number;
-    items: MenuItem[];
-  } | null>(null);
-
-  const { user, loading } = useAuth();
-  if (loading) return <Loading />;
-  if (user) {
-    return <Navigate to="/home" replace />;
-  }
+  const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
-    const disable = (e: MouseEvent) => e.preventDefault();
-    window.addEventListener("contextmenu", disable);
-
-    return () => window.removeEventListener("contextmenu", disable);
+    initContextMenu();
   }, []);
+
+  const { user, loading } = useAuth();
+
+  if (loading) return <Loading />;
+  if (user) return <Navigate to="/home" replace />;
 
   return (
     <main className="relative w-screen h-screen flex items-center justify-center bg-white text-black dark:bg-[#121212] dark:text-white smooth-transition">
