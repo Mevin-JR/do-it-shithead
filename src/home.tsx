@@ -55,11 +55,16 @@ Tone:
             },
           ],
         }),
-      }
+      },
     );
 
     const data = await res.json();
     console.log(data.reply);
+  };
+
+  const testHandle = () => {
+    console.log("Clicked on test");
+    console.log(testChat());
   };
 
   return (
@@ -69,10 +74,7 @@ Tone:
         {tabComponents[activeTab] ?? <div>No content yet</div>}
         <TasksDisplay tabId={activeTab} />
       </div>
-      <button
-        className="absolute top-0 left-0"
-        onClick={() => console.log(testChat())}
-      >
+      <button className="absolute top-0 left-0" onClick={testHandle}>
         Test
       </button>
       <Toaster />
