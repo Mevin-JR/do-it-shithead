@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { TabKey } from "./navbar";
 import { listenToTasks, TaskType } from "../../utils/taskHandler";
 import { ChevronRight } from "lucide-react";
+import { openContextMenu, setContextTask } from "../../utils/contextMenu";
 
 type TasksDisplayProps = {
   tabId: TabKey;
@@ -20,6 +21,13 @@ export default function TasksDisplay({ tabId }: TasksDisplayProps) {
       {tasks.map((task) => (
         <li
           key={task.id}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            setContextTask(task);
+            openContextMenu("task");
+          }}
           className="flex items-center gap-4 p-2 border-b border-gray-600/15"
         >
           <label className="cursor-pointer select-none">

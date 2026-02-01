@@ -1,6 +1,6 @@
 export const censorEmail = (
   email: string,
-  censorAmount: number = 5
+  censorAmount: number = 5,
 ): string => {
   if (email.length <= 2) {
     return email;
@@ -12,4 +12,9 @@ export const censorEmail = (
   const censoredMiddle = "*".repeat(censorAmount);
 
   return addrFirstChar + censoredMiddle + addrLastChar + mailDomain;
+};
+
+export const truncateString = (text: string, maxLength: number): string => {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength) + "...";
 };

@@ -1,8 +1,18 @@
 import { Image } from "@tauri-apps/api/image";
 import { IconMenuItem, Menu, MenuItem } from "@tauri-apps/api/menu";
+import { removeTask, TaskType } from "./taskHandler";
+import { truncateString } from "./userData";
 
-type ContextMenu = "default" | "home";
+type ContextMenu = "default" | "home" | "task";
 type ContextMenuFactory = () => Promise<Menu>;
+
+let currentTask: TaskType | null = null;
+
+export const setContextTask = (task: TaskType) => {
+  currentTask = task;
+};
+
+export const getContextTask = () => currentTask;
 
 export const initContextMenu = () => {
   window.addEventListener("contextmenu", async (e) => {
@@ -27,6 +37,7 @@ export const defaultContextMenu = async () => {
   return await Menu.new({
     items: [
       await IconMenuItem.new({
+        id: "refresh",
         icon: refreshIcon,
         text: "Refresh",
         action: () => {
@@ -50,7 +61,29 @@ export const homeContextMenu = async () => {
   });
 };
 
+export const taskContextMenu = async () => {
+  const deleteIcon = await Image.fromPath("assets/menu-icons/trash.png");
+  const task = getContextTask();
+
+  return await Menu.new({
+    items: [
+      await IconMenuItem.new({
+        id: "delete",
+        icon: deleteIcon,
+        text: task
+          ? `Delete "${truncateString(task.task, 10)}"`
+          : "Delete task",
+        action: () => {
+          if (!currentTask) return;
+          removeTask(currentTask.id, currentTask.tabId);
+        },
+      }),
+    ],
+  });
+};
+
 const contextMenus: Record<ContextMenu, ContextMenuFactory> = {
   default: defaultContextMenu,
   home: homeContextMenu,
+  task: taskContextMenu,
 };
