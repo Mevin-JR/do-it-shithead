@@ -9,12 +9,22 @@ type TasksDisplayProps = {
 };
 
 export default function TasksDisplay({ tabId }: TasksDisplayProps) {
-  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [taskCache, setTaskCache] = useState<
+    Partial<Record<TabKey, TaskType[]>>
+  >({});
 
   useEffect(() => {
-    const unsub = listenToTasks(tabId, setTasks);
+    if (taskCache[tabId]) return;
+    const unsub = listenToTasks(tabId, (tasks) => {
+      setTaskCache((prev) => ({
+        ...prev,
+        [tabId]: tasks,
+      }));
+    });
     return unsub;
   }, [tabId]);
+
+  const tasks = taskCache[tabId] ?? [];
 
   return (
     <ul className="w-full h-full flex flex-col gap-4">
