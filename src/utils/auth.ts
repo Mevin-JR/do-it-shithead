@@ -14,6 +14,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
+/**
+ * Maps firebase auth error codes to user friendly messages
+ * Multiple codes may intentionally map to the same message
+ *
+ * TODO:
+ * - Add i18n support if app becomes multi-lingual
+ */
 const AUTH_ERROR_MESSAGES: Record<string, string> = {
   "auth/email-already-exists": "This email is already in use",
   "auth/email-already-in-use": "This email is already in use",
@@ -34,6 +41,16 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
 
 const DEFAULT_AVATAR_LINK: string = "/default-avatar.png";
 
+/**
+ * Converts firebase auth errors into user friendly messages
+ *
+ * NOTE:
+ * - Accepts 'unknown' to safely handle non-firebase errors
+ * - Falls back to a generic message for unmapped codes
+ *
+ * @param error Error thrown during authentication
+ * @returns Safe, user friendly error message
+ */
 export const parseAuthErrorMessage = (error: unknown): string => {
   if (error instanceof FirebaseError) {
     return (
@@ -41,18 +58,38 @@ export const parseAuthErrorMessage = (error: unknown): string => {
       "Authentication failed. Please try again."
     );
   }
-  return "Unexpected error occurred.";
+  return "Authentication failed. Please try again.";
 };
 
+/**
+ * Creates a new user using email/password authentication
+ * and initialize their profile in Firebase
+ *
+ * NOTE:
+ * - Authentication is handled by Firebase Auth's `createUserWithEmailAndPassword()`
+ * - Manually updates the user profile with the `username`
+ * - Creates a curresponding Firestore `users` document
+ * - Firestore write is required for a successful signup
+ *
+ * WARNING:
+ * - If Firestore write fails, the Auth user will still exist
+ * - Cleanup must be handled manually if needed
+ *
+ * @param username Display name for the user
+ * @param email The user's email address
+ * @param password The user's plain text password
+ * @returns The created Firebase Auth user
+ * @throws FirebaseError on authentication or Firestore failure
+ */
 export const signUpWithEmailAndPassword = async (
   username: string,
   email: string,
-  password: string
+  password: string,
 ): Promise<User> => {
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
-    password
+    password,
   );
 
   await updateProfile(userCredential.user, {
@@ -72,14 +109,25 @@ export const signUpWithEmailAndPassword = async (
   return userCredential.user;
 };
 
+/**
+ * Logs in an existing user using email/password authentication
+ * and update their `lastLogin` value in corresponding user document on Firestore
+ *
+ * WARNING:
+ * - Login succeeds even if Firestore write fails
+ *
+ * @param email The user's email address
+ * @param password The user's plain text password
+ * @returns The logged in Firebase Auth user
+ */
 export const loginWithEmailAndPassword = async (
   email: string,
-  password: string
+  password: string,
 ): Promise<User> => {
   const userCredential = await signInWithEmailAndPassword(
     auth,
     email,
-    password
+    password,
   );
 
   await updateDoc(doc(db, "users", userCredential.user.uid), {
@@ -89,6 +137,7 @@ export const loginWithEmailAndPassword = async (
   return userCredential.user;
 };
 
+// FIXME: Create types dir and move exported types into it
 export type UserDataType = {
   uid: string;
   email: string;
@@ -98,6 +147,20 @@ export type UserDataType = {
   emailVerified: boolean;
 };
 
+/**
+ * Fetches the user's profile data from Firestore
+ *
+ * NOTE:
+ * - Reads from the `users/{uid}` document
+ * - Returned data is cast to `UserDataType` and assumes schema validity
+ *
+ * WARNING:
+ * - Throws if user document does not exist
+ *
+ * @param uid Firebase Auth user `uid`
+ * @returns User profile data stored in Firestore as `UserDataType`
+ * @throws Error if user data is unavailable
+ */
 export const getUserData = async (uid: string): Promise<UserDataType> => {
   const snap = await getDoc(doc(db, "users", uid));
   if (!snap.exists()) {

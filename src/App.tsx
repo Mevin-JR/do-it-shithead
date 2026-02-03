@@ -17,6 +17,7 @@ export default function App() {
   const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
+    // Initializing OS native context menu (right-click menu)
     initContextMenu();
   }, []);
 
@@ -27,6 +28,7 @@ export default function App() {
 
   return (
     <main className="relative w-screen h-screen flex items-center justify-center bg-white text-black dark:bg-[#121212] dark:text-white smooth-transition">
+      {/* TODO: Change this mess of a login setup, as mentioned in main.tsx */}
       {mode === "login" ? (
         <Login
           onSwitch={() => setMode("signup")}

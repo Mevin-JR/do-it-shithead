@@ -1,11 +1,13 @@
 import { Toaster } from "react-hot-toast";
-import Navbar, { TabKey } from "./components/home-components/navbar";
+import Navbar, { TabKey } from "../components/home-components/navbar";
 import { JSX, useState } from "react";
-import Upcoming from "./components/home-components/tabs/upcoming";
-import Today from "./components/home-components/tabs/today";
-import Calendar from "./components/home-components/tabs/calendar";
-import { openContextMenu } from "./utils/contextMenu";
+import Upcoming from "../components/home-components/tabs/upcoming";
+import Today from "../components/home-components/tabs/today";
+import Calendar from "../components/home-components/tabs/calendar";
+import { openContextMenu } from "../utils/contextMenu";
 
+// Components of each tab option
+// TODO: May change this to be abstract in the future
 const tabComponents: Record<TabKey, JSX.Element> = {
   upcoming: <Upcoming />,
   today: <Today />,
