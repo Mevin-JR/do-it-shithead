@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { TabKey } from "../components/home-components/navbar";
-import { TaskType } from "./taskHandler";
+import { TaskType } from "../utils/taskHandler";
 
 type TaskStore = {
   taskCache: Partial<Record<TabKey, TaskType[]>>;

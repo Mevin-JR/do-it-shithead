@@ -1,4 +1,4 @@
-import { useTaskStore } from "../../utils/taskStore";
+import { useTaskStore } from "../../hooks/taskStore";
 import { TabKey } from "./navbar";
 
 type TabHeaderProps = {

@@ -3,7 +3,7 @@ import { TabKey } from "./navbar";
 import { listenToTasks } from "../../utils/taskHandler";
 import { ChevronRight } from "lucide-react";
 import { openContextMenu, setContextTask } from "../../utils/contextMenu";
-import { useTaskStore } from "../../utils/taskStore";
+import { useTaskStore } from "../../hooks/taskStore";
 
 type TasksDisplayProps = {
   tabId: TabKey;
