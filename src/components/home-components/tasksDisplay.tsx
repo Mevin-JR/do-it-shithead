@@ -1,34 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { TabKey } from "./navbar";
-import { listenToTasks, TaskType } from "../../utils/taskHandler";
+import { listenToTasks } from "../../utils/taskHandler";
 import { ChevronRight } from "lucide-react";
 import { openContextMenu, setContextTask } from "../../utils/contextMenu";
+import { useTaskStore } from "../../utils/taskStore";
 
 type TasksDisplayProps = {
   tabId: TabKey;
 };
 
 export default function TasksDisplay({ tabId }: TasksDisplayProps) {
-  const [taskCache, setTaskCache] = useState<
-    Partial<Record<TabKey, TaskType[]>>
-  >({});
+  const setTasks = useTaskStore((s) => s.setTasks);
 
   useEffect(() => {
-    if (taskCache[tabId]) return;
     const unsub = listenToTasks(tabId, (tasks) => {
-      setTaskCache((prev) => ({
-        ...prev,
-        [tabId]: tasks,
-      }));
+      setTasks(tabId, tasks);
     });
-    return unsub;
-  }, [tabId]);
 
-  const tasks = taskCache[tabId] ?? [];
+    return unsub;
+  }, [tabId, setTasks]);
+
+  const tasks = useTaskStore((s) => s.taskCache[tabId]);
 
   return (
     <ul className="w-full h-full flex flex-col gap-4">
-      {tasks.map((task) => (
+      {(tasks ?? []).map((task) => (
         <li
           key={task.id}
           onContextMenu={(e) => {
