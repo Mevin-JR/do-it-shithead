@@ -1,14 +1,14 @@
 import { Image } from "@tauri-apps/api/image";
 import { IconMenuItem, Menu, MenuItem } from "@tauri-apps/api/menu";
-import { removeTask, TaskType } from "./taskHandler";
+import { removeTask, Task } from "./taskHandler";
 import { truncateString } from "./userData";
 
 type ContextMenu = "default" | "home" | "task";
 type ContextMenuFactory = () => Promise<Menu>;
 
-let currentTask: TaskType | null = null;
+let currentTask: Task | null = null;
 
-export const setContextTask = (task: TaskType) => {
+export const setContextTask = (task: Task) => {
   currentTask = task;
 };
 
