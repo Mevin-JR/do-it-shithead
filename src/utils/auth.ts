@@ -26,8 +26,8 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   "auth/email-already-in-use": "This email is already in use",
   "auth/internal-error": "Internal error, please try again later",
   "auth/invalid-email": "Please enter a valid email",
-  "auth/invalid-password": "Password must contain atleast 6 characters",
-  "auth/weak-password": "Password must contain atleast 6 characters",
+  "auth/invalid-password": "Password must contain at least 6 characters",
+  "auth/weak-password": "Password must contain at least 6 characters",
   "auth/invalid-credential": "Invalid email or password",
   "auth/user-mismatch": "Invalid email or password",
   "auth/user-not-found": "No account found with this email",
@@ -68,7 +68,7 @@ export const parseAuthErrorMessage = (error: unknown): string => {
  * NOTE:
  * - Authentication is handled by Firebase Auth's `createUserWithEmailAndPassword()`
  * - Manually updates the user profile with the `username`
- * - Creates a curresponding Firestore `users` document
+ * - Creates a corresponding Firestore `users` document
  * - Firestore write is required for a successful signup
  *
  * WARNING:
@@ -138,7 +138,7 @@ export const loginWithEmailAndPassword = async (
 };
 
 // FIXME: Create types dir and move exported types into it
-export type UserDataType = {
+export type UserData = {
   uid: string;
   email: string;
   userIcon: string;
@@ -161,11 +161,11 @@ export type UserDataType = {
  * @returns User profile data stored in Firestore as `UserDataType`
  * @throws Error if user data is unavailable
  */
-export const getUserData = async (uid: string): Promise<UserDataType> => {
+export const getUserData = async (uid: string): Promise<UserData> => {
   const snap = await getDoc(doc(db, "users", uid));
   if (!snap.exists()) {
     throw new Error("User data unavailable, please retry");
   }
 
-  return snap.data() as UserDataType;
+  return snap.data() as UserData;
 };
