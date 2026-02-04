@@ -1,11 +1,11 @@
 import { ClipboardPen } from "lucide-react";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
-import { TabKey } from "./navbar";
+import { Tab } from "./navbar";
 import { addTask } from "../../utils/taskHandler";
 import { sendErrorToast, sendSuccessToast } from "../../utils/toast";
 
 type AddTaskBarProps = {
-  tabId: TabKey;
+  tabId: Tab;
 };
 
 export default function AddTaskBar({ tabId }: AddTaskBarProps) {

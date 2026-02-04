@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import { TabKey } from "../components/home-components/navbar";
-import { TaskType } from "../utils/taskHandler";
+import { Tab } from "../components/home-components/navbar";
+import { Task } from "../utils/taskHandler";
 
 type TaskStore = {
-  taskCache: Partial<Record<TabKey, TaskType[]>>;
-  setTasks: (tabId: TabKey, tasks: TaskType[]) => void;
+  taskCache: Partial<Record<Tab, Task[]>>;
+  setTasks: (tabId: Tab, tasks: Task[]) => void;
   getTotalCount: () => number;
-  getTabCount: (tab: TabKey) => number;
+  getTabCount: (tab: Tab) => number;
 };
 
 export const useTaskStore = create<TaskStore>((set, get) => ({

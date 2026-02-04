@@ -1,8 +1,8 @@
 import { useTaskStore } from "../../hooks/taskStore";
-import { TabKey } from "./navbar";
+import { Tab } from "./navbar";
 
 type TabHeaderProps = {
-  tabId: TabKey;
+  tabId: Tab;
 };
 
 export default function TabHeader({ tabId }: TabHeaderProps) {
