@@ -11,18 +11,18 @@ import {
 } from "lucide-react";
 import { auth } from "../../../firebase";
 import { useEffect, useState } from "react";
-import { getUserData, UserDataType } from "../../utils/auth";
+import { getUserData, UserData } from "../../utils/auth";
 import { sendErrorToast } from "../../utils/toast";
 import { useAuth } from "../../context/authContext";
 import { censorEmail } from "../../utils/userData";
 
-export type TabKey =
+export type Tab =
   | (typeof tasksNavItems)[number]["id"]
   | (typeof listsNavItems)[number]["id"];
 
 type NavbarProps = {
-  activeTab: TabKey;
-  setActiveTab: (tab: TabKey) => void;
+  activeTab: Tab;
+  setActiveTab: (tab: Tab) => void;
 };
 
 const tasksNavItems = [
@@ -41,7 +41,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
     if (typeof window === "undefined") return true;
     return localStorage.getItem("sidebar") !== "closed";
   });
-  const [userData, setUserData] = useState<UserDataType>();
+  const [userData, setUserData] = useState<UserData>();
 
   useEffect(() => {
     localStorage.setItem("sidebar", sidebarOpen ? "open" : "closed");

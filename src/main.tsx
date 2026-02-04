@@ -10,7 +10,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <AuthProvider>
       <Routes>
-        {/* TODO: Change this entry route, add "/login" and "/signup". Redirect users to "/login" instead of "/" */}
         <Route path="/" element={<App />} />
         <Route
           path="/home"
