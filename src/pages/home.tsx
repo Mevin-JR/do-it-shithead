@@ -1,4 +1,3 @@
-import { Toaster } from "react-hot-toast";
 import Navbar, { Tab } from "../components/home-components/navbar";
 import { JSX, useState } from "react";
 import Upcoming from "../components/home-components/tabs/upcoming";
@@ -32,7 +31,6 @@ export default function Home() {
       >
         {tabComponents[activeTab] ?? <div>No content yet</div>}
       </div>
-      <Toaster />
     </main>
   );
 }
