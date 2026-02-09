@@ -4,6 +4,15 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-primary-light: #fed43c;
+  --color-primary-light-110: #fec701;
+
+  --animate-toast-in: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-toast-out: toastOut 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-pulse-strong: pulse-strong 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -39,27 +48,30 @@
   width: 4px;
   aspect-ratio: 1;
   border-radius: 50%;
-  box-shadow: 19px 0 0 7px, 38px 0 0 3px, 57px 0 0 0;
+  box-shadow:
+    19px 0 0 7px,
+    38px 0 0 3px,
+    57px 0 0 0;
   transform: translateX(-38px);
   animation: l21 1s infinite alternate linear;
 }
 
 @keyframes l21 {
   50% {
-    box-shadow: 19px 0 0 3px, 38px 0 0 7px, 57px 0 0 3px;
+    box-shadow:
+      19px 0 0 3px,
+      38px 0 0 7px,
+      57px 0 0 3px;
   }
   100% {
-    box-shadow: 19px 0 0 0, 38px 0 0 3px, 57px 0 0 7px;
+    box-shadow:
+      19px 0 0 0,
+      38px 0 0 3px,
+      57px 0 0 7px;
   }
 }
 
 /* Animations */
-
-@theme {
-  --animate-toast-in: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  --animate-toast-out: toastOut 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  --animate-pulse-strong: pulse-strong 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
 
 @keyframes toastIn {
   from {
