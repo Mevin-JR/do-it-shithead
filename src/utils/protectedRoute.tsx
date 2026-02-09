@@ -9,12 +9,11 @@ export default function ProtectedRoute({
   children: JSX.Element;
 }) {
   const { user, loading } = useAuth();
+
   if (loading) return <Loading />;
 
-  // Redirect user to '/' if not authenticated when trying to access protected routes
-  // TODO: Change this entry route, add "/login" and "/signup", redirect users to "/login" instead of "/"
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
+  // User is redirected to '/login' if unauthenticated
+  if (!user) return <Navigate to="/login" replace />;
+
   return children;
 }

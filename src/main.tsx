@@ -1,24 +1,28 @@
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import App from "./App";
 import Home from "./pages/home";
 import { AuthProvider } from "./context/authContext";
 import ProtectedRoute from "./utils/protectedRoute";
+import Login from "./pages/login";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+        <Route element={<App />}>
+          <Route index element={<Navigate to="/login" replace />} />
+          <Route path="login" element={<Login />} />
+          <Route
+            path="home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
       </Routes>
     </AuthProvider>
   </BrowserRouter>,
