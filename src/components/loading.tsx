@@ -10,7 +10,7 @@ const loaderCaptions: string[] = [
 
 export default function Loading() {
   const [loadingCaption, setLoadingCaption] = useState<string>(
-    "Loading, please wait..."
+    "Loading, please wait...",
   );
 
   useEffect(() => {
@@ -29,10 +29,10 @@ export default function Loading() {
   }, []);
 
   return (
-    <div className="absolute w-screen h-screen flex items-center justify-center backdrop-blur">
+    <div className="z-999 absolute w-screen h-screen flex items-center justify-center backdrop-blur">
       <div className="w-[95%] h-[95%] flex flex-col gap-3 items-center justify-center rounded-lg bg-[#f4f4f4] dark:bg-[#141414] shadow-[0_0_25px_10px_rgba(0,0,0,0.25)] smooth-transition">
-        <div className="loader text-[#78c9f1] dark:text-[#fed43c] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)] dark:drop-shadow-[0_1px_2px_rgba(255,255,255,0.25)]" />
-        <p className="text-[#78c9f1] dark:text-[#fed43c] text-shadow-[0_2px_3px_rgba(0,0,0,0.25)] dark:text-shadow-[0_2px_3px_rgba(255,255,255,0.25)]">
+        <div className="loader text-primary-light drop-shadow-[0_2px_3px_rgb(254,212,60)]" />
+        <p className="text-primary-light text-shadow-[0_2px_3px_rgb(254,212,60)]">
           {loadingCaption}
         </p>
       </div>
