@@ -9,15 +9,33 @@ import {
   parseAuthErrorMessage,
 } from "../utils/auth";
 import Loading from "../components/loading";
+import { AUTH_PROVIDER_STATUS, AuthProvider } from "../configs/authConfig";
+import { firstCharUpperCase } from "../utils/userData";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const { user, loading } = useAuth();
 
+  // FIXME: Choose either popup or redirect for google sign in
+  // useEffect(() => {
+  //   getRedirectResult(auth)
+  //     .then((result) => {
+  //       if (result) {
+  //         console.log("DEBUG: Google sign-in successful");
+  //         sendSuccessToast(`Success! ${result.user.email}`) // DEBUG
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       sendErrorToast(parseAuthErrorMessage(err));
+  //       sendErrorToast(err) // DEBUG
+  //     })
+  //     .finally(() => console.log("Nothing happened"))
+  // }, [auth]);
+
+  if (loading) return <Loading />;
   if (user) return <Navigate to="/home" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,15 +47,35 @@ export default function Login() {
     }
 
     try {
-      setLoading(true);
+      setButtonLoading(true);
       await loginWithEmailAndPassword(email.trim(), password);
-
-      navigate("/home", { replace: true });
     } catch (err) {
       sendErrorToast(parseAuthErrorMessage(err));
     } finally {
-      setLoading(false);
+      setButtonLoading(false);
     }
+  };
+
+  const handleSignInProvider = async (e: React.MouseEvent, provider: AuthProvider) => {
+    e.preventDefault();
+
+    if (!AUTH_PROVIDER_STATUS[provider].enabled) {
+      sendErrorToast(`${firstCharUpperCase(provider)} sign-in has been disabled`)
+      return
+    }
+    // FIXME: Implement google sign in (Both popup and redirect unavailable right now)
+    // const provider = new GoogleAuthProvider();
+
+    // try {
+    //   setButtonLoading(true);
+    //   await signInWithRedirect(auth, provider);
+    //   console.log("Logged in user:");
+    // } catch (err) {
+    //   sendErrorToast(parseAuthErrorMessage(err));
+    //   sendErrorToast("Error handling google login") // DEBUG
+    // } finally {
+    //   setButtonLoading(false);
+    // }
   };
 
   return (
@@ -60,9 +98,9 @@ export default function Login() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="lucide lucide-tally5-icon lucide-tally-5"
               >
                 <path d="M4 4v16" />
@@ -120,17 +158,17 @@ export default function Login() {
               />
               <button
                 type="submit"
-                disabled={loading}
+                disabled={buttonLoading}
                 className={`mt-4 flex min-w-21 w-full items-center justify-center overflow-hidden rounded-lg h-12 px-4 text-sm transition-colors duration-200 
-                ${loading ? "bg-gray-400 text-gray-800 cursor-not-allowed" : "bg-primary-light hover:bg-primary-light-110 cursor-pointer"}`}
+                ${buttonLoading ? "bg-gray-400 text-gray-800 cursor-not-allowed" : "bg-primary-light hover:bg-primary-light-110 cursor-pointer"}`}
               >
-                {loading ? "Loading..." : "Sign In"}
+                {buttonLoading ? "Loading..." : "Sign In"}
               </button>
             </form>
             <div className="mt-5 text-center">
               <p className="text-gray-400 text-xs">
                 Don't have an account?{" "}
-                {loading ? (
+                {buttonLoading ? (
                   <span className="text-primary-light font-semibold hover:underline cursor-not-allowed">
                     Sign up
                   </span>
@@ -150,7 +188,10 @@ export default function Login() {
                 <span className="px-2 text-gray-400">Or continue with</span>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <button className="flex items-center justify-center gap-2 h-11 px-4 rounded-lg border border-gray-400 bg-transparent text-gray-900 text-sm font-medium cursor-pointer hover:shadow-lg transition-shadow duration-200">
+                <button
+                  onClick={(e) => handleSignInProvider(e, "google")}
+                  className="flex items-center justify-center gap-2 h-11 px-4 rounded-lg border border-gray-400 bg-transparent text-gray-900 text-sm font-medium cursor-pointer hover:shadow-lg transition-shadow duration-200"
+                >
                   <svg className="size-5" viewBox="0 0 24 24">
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -171,7 +212,9 @@ export default function Login() {
                   </svg>
                   Google
                 </button>
-                <button className="flex items-center justify-center gap-2 h-11 px-4 rounded-lg border border-gray-400 bg-transparent text-gray-900 text-sm font-medium cursor-pointer hover:shadow-lg transition-shadow duration-200">
+                <button 
+                onClick={(e) => handleSignInProvider(e, "github")}
+                className="flex items-center justify-center gap-2 h-11 px-4 rounded-lg border border-gray-400 bg-transparent text-gray-900 text-sm font-medium cursor-pointer hover:shadow-lg transition-shadow duration-200">
                   <svg
                     className="size-5"
                     fill="currentColor"
