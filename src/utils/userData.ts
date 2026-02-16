@@ -18,3 +18,12 @@ export const truncateString = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 };
+
+export const firstCharUpperCase = (text: string): string => {
+  if (text.length < 2) return text.toUpperCase();
+
+  const firstChar = text[0].toUpperCase();
+  const remainingText = text.substring(1, text.length)
+
+  return firstChar + remainingText;
+}

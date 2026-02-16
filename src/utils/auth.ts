@@ -37,6 +37,9 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
     "Session timeout, please restart and try again",
   "auth/timeout": "Operation timeout, please restart and try again",
   "auth/network-request-failed": "Request failed, please try again",
+
+  "auth/account-exists-with-different-credential":
+    "Account already exists with different sign in method",
 };
 
 const DEFAULT_AVATAR_LINK: string = "/default-avatar.png";
