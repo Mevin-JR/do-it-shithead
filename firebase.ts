@@ -1,7 +1,11 @@
 /// <reference types="vite/client" />
 
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  getAuth,
+  setPersistence,
+} from "firebase/auth";
 import {
   initializeFirestore,
   persistentLocalCache,
@@ -22,3 +26,5 @@ export const db = initializeFirestore(app, {
     tabManager: persistentMultipleTabManager(),
   }),
 });
+
+setPersistence(auth, browserLocalPersistence);

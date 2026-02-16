@@ -14,12 +14,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
       setUser(user);
       setLoading(false);
+
+      if (user) await updateUserLastLogin(user);
+      console.log("Current user:", auth.currentUser);
     });
 
-    return unsub;
+    return () => unsub();
   }, []);
 
   return (
