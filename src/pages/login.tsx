@@ -1,7 +1,7 @@
 import { LockKeyhole, Mail } from "lucide-react";
 import Input from "../components/input";
 import { useAuth } from "../context/authContext";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { sendErrorToast } from "../utils/toast";
 import {

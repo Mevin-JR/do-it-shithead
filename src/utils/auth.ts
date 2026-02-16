@@ -62,6 +62,17 @@ export const parseAuthErrorMessage = (error: unknown): string => {
 };
 
 /**
+ * Updates provided user's last login timestamp for provided user
+ *
+ * @param user The user object
+ */
+export const updateUserLastLogin = async (user: User) => {
+  await updateDoc(doc(db, "users", user.uid), {
+    lastLogin: serverTimestamp(),
+  });
+};
+
+/**
  * Creates a new user using email/password authentication
  * and initialize their profile in Firebase
  *
@@ -129,10 +140,6 @@ export const loginWithEmailAndPassword = async (
     email,
     password,
   );
-
-  await updateDoc(doc(db, "users", userCredential.user.uid), {
-    lastLogin: serverTimestamp(),
-  });
 
   return userCredential.user;
 };
