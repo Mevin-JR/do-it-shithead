@@ -2,10 +2,13 @@ import "./app.css";
 
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { AnimatePresence } from "motion/react";
+import { Outlet, useLocation } from "react-router-dom";
 import { initContextMenu } from "./utils/contextMenu";
 
 export default function App() {
+  const location = useLocation();
+
   useEffect(() => {
     // Initializing OS native context menu (right-click menu)
     initContextMenu();
@@ -13,7 +16,9 @@ export default function App() {
 
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <Outlet />
+      <AnimatePresence mode="wait">
+        <Outlet key={location.pathname} />
+      </AnimatePresence>
       <Toaster />
     </main>
   );

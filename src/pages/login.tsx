@@ -11,6 +11,7 @@ import {
 import Loading from "../components/loading";
 import { AUTH_PROVIDER_STATUS, AuthProvider } from "../configs/authConfig";
 import { firstCharUpperCase } from "../utils/userData";
+import { motion } from "motion/react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -79,8 +80,15 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-0 md:p-8">
-      <div className="w-full max-w-6xl h-full md:h-150 flex overflow-hidden rounded-none md:rounded-xl shadow-2xl bg-white border border-solid border-[#233648]">
+    // TODO: Use framer motion to animate the fade in effects of quotes and other elements
+    <motion.div
+      className="relative min-h-screen flex items-center justify-center p-0 md:p-8"
+      initial={{ opacity: 0.5, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="w-full max-w-6xl h-full md:h-175 flex overflow-hidden rounded-none md:rounded-xl shadow-2xl bg-white border border-solid border-[#233648]">
         {/* Left side (quote) */}
         <div
           className="hidden md:flex relative w-1/2 flex-col justify-between p-12 bg-cover bg-center"
@@ -229,6 +237,6 @@ export default function Login() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
