@@ -106,10 +106,6 @@ export const signUpWithEmailAndPassword = async (
     password,
   );
 
-  await updateProfile(userCredential.user, {
-    displayName: username,
-  });
-
   await setDoc(doc(db, "users", userCredential.user.uid), {
     uid: userCredential.user.uid,
     username,
@@ -118,6 +114,10 @@ export const signUpWithEmailAndPassword = async (
     lastLogin: serverTimestamp(),
     emailVerified: userCredential.user.emailVerified,
     userIcon: DEFAULT_AVATAR_LINK,
+  });
+
+  await updateProfile(userCredential.user, {
+    displayName: username,
   });
 
   return userCredential.user;

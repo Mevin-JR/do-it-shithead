@@ -6,6 +6,7 @@ import Home from "./pages/home";
 import { AuthProvider } from "./context/authContext";
 import ProtectedRoute from "./utils/protectedRoute";
 import Login from "./pages/login";
+import Signup from "./pages/signup";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <Routes>
         <Route element={<App />}>
           <Route index element={<Navigate to="/login" replace />} />
+          <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
           <Route
             path="home"
