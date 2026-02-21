@@ -70,9 +70,11 @@ export const parseAuthErrorMessage = (error: unknown): string => {
  * @param user The user object
  */
 export const updateUserLastLogin = async (user: User) => {
-  await updateDoc(doc(db, "users", user.uid), {
-    lastLogin: serverTimestamp(),
-  });
+  await setDoc(
+    doc(db, "users", user.uid),
+    { lastLogin: serverTimestamp() },
+    { merge: true },
+  );
 };
 
 /**

@@ -57,12 +57,17 @@ export default function Login() {
     }
   };
 
-  const handleSignInProvider = async (e: React.MouseEvent, provider: AuthProvider) => {
+  const handleSignInProvider = async (
+    e: React.MouseEvent,
+    provider: AuthProvider,
+  ) => {
     e.preventDefault();
 
     if (!AUTH_PROVIDER_STATUS[provider].enabled) {
-      sendErrorToast(`${firstCharUpperCase(provider)} sign-in has been disabled`)
-      return
+      sendErrorToast(
+        `${firstCharUpperCase(provider)} sign-in has been disabled`,
+      );
+      return;
     }
     // FIXME: Implement google sign in (Both popup and redirect unavailable right now)
     // const provider = new GoogleAuthProvider();
@@ -123,7 +128,7 @@ export default function Login() {
             </h2>
           </div>
           <div className="flex flex-col gap-2">
-            <blockquote className="text-3xl italic font-light leading-relaxed text-white">
+            <blockquote className="text-4xl italic font-bold leading-relaxed text-white">
               "The secret of getting ahead is getting started."
             </blockquote>
             <cite className="text-primary-light not-italic text-lg font-medium">
@@ -142,7 +147,7 @@ export default function Login() {
                 Welcome Back
               </h2>
               <p className="text-gray-500 text-sm">
-                Sign in to continue your grind.
+                Sign in to continue your grind
               </p>
             </div>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -220,9 +225,10 @@ export default function Login() {
                   </svg>
                   Google
                 </button>
-                <button 
-                onClick={(e) => handleSignInProvider(e, "github")}
-                className="flex items-center justify-center gap-2 h-11 px-4 rounded-lg border border-gray-400 bg-transparent text-gray-900 text-sm font-medium cursor-pointer hover:shadow-lg transition-shadow duration-200">
+                <button
+                  onClick={(e) => handleSignInProvider(e, "github")}
+                  className="flex items-center justify-center gap-2 h-11 px-4 rounded-lg border border-gray-400 bg-transparent text-gray-900 text-sm font-medium cursor-pointer hover:shadow-lg transition-shadow duration-200"
+                >
                   <svg
                     className="size-5"
                     fill="currentColor"
