@@ -25,7 +25,7 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   "auth/email-already-exists": "This email is already in use",
   "auth/email-already-in-use": "This email is already in use",
   "auth/internal-error": "Internal error, please try again later",
-  "auth/invalid-email": "Please enter a valid email",
+  "auth/invalid-email": "Invalid email address",
   "auth/invalid-password": "Password must contain at least 6 characters",
   "auth/weak-password": "Password must contain at least 6 characters",
   "auth/invalid-credential": "Invalid email or password",
@@ -33,9 +33,8 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   "auth/user-not-found": "No account found with this email",
   "auth/user-disabled": "Account disabled by an administrator",
   "auth/too-many-requests": "Too many attempts, try again later",
-  "auth/session-cookie-expired":
-    "Session timeout, please restart and try again",
-  "auth/timeout": "Operation timeout, please restart and try again",
+  "auth/session-cookie-expired": "Session timeout, restart and try again",
+  "auth/timeout": "Operation timeout, restart and try again",
   "auth/network-request-failed": "Request failed, please try again",
 
   "auth/account-exists-with-different-credential":
