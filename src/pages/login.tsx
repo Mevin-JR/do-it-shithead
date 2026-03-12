@@ -86,62 +86,70 @@ export default function Login() {
 
   return (
     // TODO: Use framer motion to animate the fade in effects of quotes and other elements
-    <motion.div
-      className="relative min-h-screen flex items-center justify-center p-0 md:p-8"
-      initial={{ opacity: 0.5, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="relative min-h-screen flex items-center justify-center p-0 md:p-8">
       <div className="w-full max-w-6xl h-full md:h-175 flex overflow-hidden rounded-none md:rounded-xl shadow-2xl bg-white border border-solid border-[#233648]">
         {/* Left side (quote) */}
         <div
-          className="hidden md:flex relative w-1/2 flex-col justify-between p-12 bg-cover bg-center"
+          className="hidden md:block relative w-1/2 p-12 bg-cover bg-center"
           style={{
             backgroundImage:
               "linear-gradient(rgba(16, 25, 34, 0.7), rgba(16, 25, 34, 0.7)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuApBLE8p8DAmyPFh-oqG8s41NfYlmb2It6lIevhV71Aj_alh8QkcfDSV23xIAL7_Zqd77rjFDsjpgYlI7XDOIktP2yf4_JEIzCa0PDUzFZOEMGf5m7iLLLpAiqdSBrxok25tBii5Mbom2C2c_YNu_1QAh8zPeFaNvm44EXJXn-7BknN5fI6e5COcRJGtlStnXoB_ReYgfygPUSBD-UYkTxGCVHdc9UDpVAXgNhcidiWoM5OR0ungNuaGiGKYbCzMLS3ICLv7JQe1oY",
           }}
         >
-          <div className="flex items-center gap-2">
-            <div className="p-1 bg-primary-light text-black rounded">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-tally5-icon lucide-tally-5"
-              >
-                <path d="M4 4v16" />
-                <path d="M9 4v16" />
-                <path d="M14 4v16" />
-                <path d="M19 4v16" />
-                <path d="M22 6 2 18" />
-              </svg>
+          <motion.div
+            className="h-full flex flex-col justify-between"
+            initial={{ opacity: 0.5, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 8 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex items-center gap-2">
+              <div className="p-1 bg-primary-light text-black rounded">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-tally5-icon lucide-tally-5"
+                >
+                  <path d="M4 4v16" />
+                  <path d="M9 4v16" />
+                  <path d="M14 4v16" />
+                  <path d="M19 4v16" />
+                  <path d="M22 6 2 18" />
+                </svg>
+              </div>
+              <h2 className="text-white text-2xl font-bold leading-tight tracking-[-0.015em]">
+                Do it, Shithead!
+              </h2>
             </div>
-            <h2 className="text-white text-2xl font-bold leading-tight tracking-[-0.015em]">
-              Do it, Shithead!
-            </h2>
-          </div>
-          <div className="flex flex-col gap-2">
-            <blockquote className="text-4xl italic font-bold leading-relaxed text-white">
-              "The secret of getting ahead is getting started."
-            </blockquote>
-            <cite className="text-primary-light not-italic text-lg font-medium">
-              - Mark Twain
-            </cite>
-          </div>
-          <div className="text-gray-400 text-sm">
-            <p>Choose your mentor. Build your momentum.</p>
-          </div>
+            <div className="flex flex-col gap-2">
+              <blockquote className="text-4xl italic font-bold leading-relaxed text-white">
+                "The secret of getting ahead is getting started."
+              </blockquote>
+              <cite className="text-primary-light not-italic text-lg font-medium">
+                - Mark Twain
+              </cite>
+            </div>
+            <div className="text-gray-400 text-sm">
+              <p>Choose your mentor. Build your momentum.</p>
+            </div>
+          </motion.div>
         </div>
         {/* Right side (form) */}
         <div className="w-full md:w-1/2 flex flex-col justify-center px-8 md:px-16 py-12 bg-white">
-          <div className="max-w-100 w-full mx-auto">
+          <motion.div
+            className="max-w-100 w-full mx-auto"
+            initial={{ opacity: 0.5, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -8 }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="mb-10">
               <h2 className="text-gray-900 text-3xl font-bold leading-tight tracking-[-0.015em]">
                 Welcome Back
@@ -240,9 +248,9 @@ export default function Login() {
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
