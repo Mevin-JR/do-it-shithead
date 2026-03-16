@@ -93,7 +93,7 @@ export default function Login() {
           className="hidden md:block relative w-1/2 p-12 bg-cover bg-center"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(16, 25, 34, 0.7), rgba(16, 25, 34, 0.7)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuApBLE8p8DAmyPFh-oqG8s41NfYlmb2It6lIevhV71Aj_alh8QkcfDSV23xIAL7_Zqd77rjFDsjpgYlI7XDOIktP2yf4_JEIzCa0PDUzFZOEMGf5m7iLLLpAiqdSBrxok25tBii5Mbom2C2c_YNu_1QAh8zPeFaNvm44EXJXn-7BknN5fI6e5COcRJGtlStnXoB_ReYgfygPUSBD-UYkTxGCVHdc9UDpVAXgNhcidiWoM5OR0ungNuaGiGKYbCzMLS3ICLv7JQe1oY",
+              "linear-gradient(rgba(16, 25, 34, 0.7), rgba(16, 25, 34, 0.7)), url('/login_bg.png')",
           }}
         >
           <motion.div

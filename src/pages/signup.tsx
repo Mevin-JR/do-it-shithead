@@ -64,7 +64,7 @@ export default function Signup() {
           className="hidden md:block relative w-1/2 p-12 bg-cover bg-center"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(16, 25, 34, 0.7), rgba(16, 25, 34, 0.7)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxBvTFIPbyuqVHyWMe-281it7twKkqYcVSRCRJBzKt5Op_rTTbDWqrVWA3jTS4n6E5fhdON2Lt21GcAhaDY-9HBM5kmJBhofD5NEk_0zGbo8Bf7FOtPOZBaEMzonC_jl9srI1KD6VNUSSAW1tLF5XkQWqOvhigzsp1Dr55rbjjrCzMGtv8-j7t2yT6_VA-efsdXFk-52mvmT62oHDPp__5phehkksOY7ZR4XKt601CzvpC3ZTdyLD0WhHqxWu-cLPoL1ZjhZOaYpw",
+              "linear-gradient(rgba(16, 25, 34, 0.7), rgba(16, 25, 34, 0.7)), url('/signup_bg.png')",
           }}
         >
           <motion.div
