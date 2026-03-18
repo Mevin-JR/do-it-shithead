@@ -11,10 +11,8 @@ import {
 } from "lucide-react";
 import { auth } from "../../../firebase";
 import { useEffect, useState } from "react";
-import { getUserData, UserData } from "../../utils/auth";
-import { sendErrorToast } from "../../utils/toast";
-import { useAuth } from "../../context/authContext";
 import { censorEmail } from "../../utils/userData";
+import { CachedUserData } from "../../utils/auth";
 
 export type Tab =
   | (typeof tasksNavItems)[number]["id"]
@@ -41,7 +39,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
     if (typeof window === "undefined") return true;
     return localStorage.getItem("sidebar") !== "closed";
   });
-  const [userData, setUserData] = useState<UserData>();
+  const [userData, setUserData] = useState<CachedUserData>();
 
   useEffect(() => {
     localStorage.setItem("sidebar", sidebarOpen ? "open" : "closed");
@@ -53,15 +51,10 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
 
   const iconSize = sidebarOpen ? 18 : 22;
 
-  const { user, loading } = useAuth();
-
   useEffect(() => {
-    if (loading || !user) return;
-
-    getUserData(user.uid)
-      .then((data) => setUserData(data))
-      .catch((error) => sendErrorToast(error));
-  }, [user?.uid, loading]);
+    const cached = localStorage.getItem("user");
+    if (cached) setUserData(JSON.parse(cached));
+  }, []);
 
   return (
     <nav

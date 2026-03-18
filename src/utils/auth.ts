@@ -6,13 +6,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { FirebaseError } from "firebase/app";
-import {
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 
 /**
  * Maps firebase auth error codes to user friendly messages
@@ -76,6 +70,25 @@ export const updateUserLastLogin = async (user: User) => {
   );
 };
 
+export type CachedUserData = {
+  uid: string;
+  username?: string;
+  email: string;
+  userIcon?: string;
+};
+
+const cacheUserData = (user: CachedUserData) => {
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      uid: user.uid,
+      username: user.username,
+      email: user.email,
+      userIcon: user.userIcon || DEFAULT_AVATAR_LINK,
+    }),
+  );
+};
+
 /**
  * Creates a new user using email/password authentication
  * and initialize their profile in Firebase
@@ -107,21 +120,33 @@ export const signUpWithEmailAndPassword = async (
     password,
   );
 
-  await setDoc(doc(db, "users", userCredential.user.uid), {
-    uid: userCredential.user.uid,
+  const user = userCredential.user;
+
+  const userData: CachedUserData = {
+    uid: user.uid,
+    username: username,
+    email: email,
+    userIcon: DEFAULT_AVATAR_LINK,
+  };
+
+  cacheUserData(userData);
+
+  await updateProfile(user, {
+    displayName: username,
+    photoURL: DEFAULT_AVATAR_LINK,
+  });
+
+  await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
     username,
     email,
     createdAt: serverTimestamp(),
     lastLogin: serverTimestamp(),
-    emailVerified: userCredential.user.emailVerified,
-    userIcon: DEFAULT_AVATAR_LINK,
+    emailVerified: user.emailVerified,
+    userIcon: user.photoURL || DEFAULT_AVATAR_LINK,
   });
 
-  await updateProfile(userCredential.user, {
-    displayName: username,
-  });
-
-  return userCredential.user;
+  return user;
 };
 
 /**
@@ -144,6 +169,17 @@ export const loginWithEmailAndPassword = async (
     email,
     password,
   );
+
+  const user = userCredential.user;
+
+  const userData: CachedUserData = {
+    uid: user.uid,
+    username: user.displayName ?? undefined,
+    email: email,
+    userIcon: user.photoURL ?? undefined,
+  };
+
+  cacheUserData(userData);
 
   return userCredential.user;
 };
