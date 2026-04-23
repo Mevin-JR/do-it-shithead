@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "@tauri-apps/api": "^2.9.1",
     "@tauri-apps/plugin-opener": "^2",
+    "dayjs": "^1.11.20",
     "firebase": "^12.6.0",
     "lucide-react": "^0.562.0",
     "motion": "^12.34.1",

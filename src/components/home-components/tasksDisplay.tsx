@@ -23,7 +23,7 @@ export default function TasksDisplay({ tabId }: TasksDisplayProps) {
   const tasks = useTaskStore((s) => s.taskCache[tabId]);
 
   return (
-    <ul className="w-full h-full flex flex-col gap-4">
+    <ul className="w-full flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
       {(tasks ?? []).map((task) => (
         <li
           key={task.id}
