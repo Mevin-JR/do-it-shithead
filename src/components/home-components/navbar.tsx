@@ -59,7 +59,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
   return (
     <nav
       id="navbar"
-      className={`w-72 max-w-[25vw] min-h-full flex flex-col gap-5 p-3 rounded-xl bg-[#f4f4f4] transition-all duration-300 overflow-hidden text-nowrap ${
+      className={`w-72 max-w-[20vw] min-h-full flex flex-col gap-5 p-3 rounded-xl bg-[#f4f4f4] transition-all duration-300 overflow-hidden text-nowrap ${
         !sidebarOpen && "close-nav"
       }`}
     >
