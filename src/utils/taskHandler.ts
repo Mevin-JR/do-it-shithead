@@ -17,7 +17,20 @@ export type Task = {
   id: string;
   tabId: Tab;
   task: string;
+  description: string;
   list: string; // TODO: Change this when lists types are specified
+  tags: string[];
+  dueDate?: Timestamp;
+  createdAt: Timestamp;
+  subtasks: SubTask[];
+};
+
+export type SubTask = {
+  id: string;
+  tabId: Tab;
+  parentTaskId: string;
+  task: string;
+  description: string;
   dueDate?: Timestamp;
   createdAt: Timestamp;
 };
@@ -49,9 +62,12 @@ export const addTask = async (task: string, tabId: Tab): Promise<string> => {
     {
       tabId,
       task,
+      description: "",
       list: "",
+      tags: [],
       dueDate: null,
       createdAt: serverTimestamp(),
+      subtasks: [],
     },
   );
 
