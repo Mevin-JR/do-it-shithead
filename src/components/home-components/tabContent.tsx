@@ -21,12 +21,16 @@ export default function TabContent({ activeTab }: TabContentProps) {
     return () => clearInterval(interval);
   }, []);
 
-  const taskCount = useTaskStore((s) => s.getTabCount(activeTab));
   const timeFormat = "ddd HH:mm";
+  const taskCount = useTaskStore((s) => s.getTabCount(activeTab));
+  const setSelectedTask = useTaskStore((s) => s.setSelectedTask);
 
   return (
-    <div className="h-full flex flex-col gap-5 min-h-0">
-      <TabHeader tabId={activeTab} taskCount={taskCount} />
+    <div
+      className="h-full flex flex-col gap-5 min-h-0"
+      onClick={() => setSelectedTask(null)}
+    >
+      <TabHeader tabId={activeTab} />
       <AddTaskBar tabId={activeTab} />
       <TasksDisplay tabId={activeTab} />
 

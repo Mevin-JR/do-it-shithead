@@ -21,12 +21,14 @@ export default function TasksDisplay({ tabId }: TasksDisplayProps) {
   }, [tabId, setTasks]);
 
   const tasks = useTaskStore((s) => s.taskCache[tabId]);
+  const setSelectedTask = useTaskStore((s) => s.setSelectedTask);
 
   return (
-    <ul className="w-full flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
+    <ul className="w-full flex flex-col overflow-y-auto flex-1 min-h-0">
       {(tasks ?? []).map((task) => (
         <li
           key={task.id}
+          role="button"
           onContextMenu={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -34,7 +36,11 @@ export default function TasksDisplay({ tabId }: TasksDisplayProps) {
             setContextTask(task);
             openContextMenu("task");
           }}
-          className="flex items-center gap-4 p-2 border-b border-gray-600/15"
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedTask(task);
+          }}
+          className="flex items-center gap-4 py-4 px-2 border-b border-gray-600/15 cursor-pointer"
         >
           <label className="cursor-pointer select-none">
             <input type="checkbox" className="peer hidden" />
@@ -46,10 +52,8 @@ export default function TasksDisplay({ tabId }: TasksDisplayProps) {
                  peer-checked:border-cyan-500"
             />
           </label>
-          <span className="flex-1 text-sm cursor-pointer">{task.task}</span>
-          <button className="cursor-pointer">
-            <ChevronRight size={22} className="text-gray-600" />
-          </button>
+          <span className="flex-1 text-sm">{task.task}</span>
+          <ChevronRight size={22} className="text-gray-600" />
         </li>
       ))}
     </ul>

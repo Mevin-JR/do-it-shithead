@@ -18,7 +18,7 @@ export default function Home() {
     >
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <TabContent activeTab={activeTab} />
-      <TaskEditor activeTab={activeTab} />
+      <TaskEditor />
     </main>
   );
 }

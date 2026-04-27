@@ -7,10 +7,13 @@ type TaskStore = {
   setTasks: (tabId: Tab, tasks: Task[]) => void;
   getTotalCount: () => number;
   getTabCount: (tab: Tab) => number;
+  selectedTask: Task | null;
+  setSelectedTask: (task: Task | null) => void;
 };
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
   taskCache: {},
+  selectedTask: null,
   setTasks: (tabId, tasks) =>
     set((state) => ({
       taskCache: { ...state.taskCache, [tabId]: tasks },
@@ -21,4 +24,5 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       0,
     ),
   getTabCount: (tabId) => get().taskCache[tabId]?.length ?? 0,
+  setSelectedTask: (task) => set({ selectedTask: task }),
 }));
